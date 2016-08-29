@@ -1,0 +1,19 @@
+{
+  "name": "node_weixin_shizhan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "DEBUG=app:*:* node --harmony app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.3",
+    "debug": "^2.2.0",
+    "koa": "^1.2.1",
+    "request": "^2.74.0",
+    "sha1": "^1.1.1"
+  }
+}
