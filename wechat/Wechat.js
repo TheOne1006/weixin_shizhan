@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var request = Promise.promisify(require('request'));
+var util = require('./util');
 var debug = require('debug')('app:wechat:Wechat');
 /**
  * 微信配置
@@ -97,6 +98,19 @@ Wechat.prototype.updateAccessToken = function () {
             });
     });
 
+};
+
+Wechat.prototype.reply = function () {
+
+    const content = this.body;
+    const message = this.weixin;
+    const xml = util.tpl(content, message);
+
+    debug(' xml : %s', xml);
+
+    this.status = 200;
+    this.type = 'application/xml';
+    this.body = xml;
 };
 
 module.exports = Wechat;

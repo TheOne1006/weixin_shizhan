@@ -1,15 +1,15 @@
 'use strict';
 var sha1 = require('sha1');
 var Wechat = require('./Wechat');
-var getRawBody = require('raw-body')
+var getRawBody = require('raw-body');
 var util = require('./util');
 var debug = require('debug')('app:wechat:g');
 
 
-module.exports = function (options) {
+module.exports = function (options, handler) {
     var wechat = new Wechat(options);
 
-    return function* () {
+    return function* (next) {
         debug(this.query);
         const that = this;
 
@@ -51,27 +51,13 @@ module.exports = function (options) {
 
             let message = util.formatMessage(content.xml);
 
-            debug(message);
+            debug('message :%s', message);
 
-            // Types 事件
-            if (message.MsgType === 'event') {
-                // 事件类型 为 订阅
-                if (message.Event === 'subscribe') {
-                    let now = new Date().getTime();
+            this.weixin = message;
 
-                    that.status = 200;
-                    that.type = 'application/xml';
-                    that.body = `<xml>
-<ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
-<FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
-<CreateTime>${now}</CreateTime>
-<MsgType><![CDATA[text]]></MsgType>
-<Content><![CDATA[你好 -- theone]]></Content>
-</xml>`;
+            yield handler.call(this, next);
 
-                    return;
-                }
-            }
+            wechat.reply.call(this);
         }
     };
 };

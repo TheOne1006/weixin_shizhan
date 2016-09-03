@@ -2,6 +2,7 @@
 
 var xml2js = require('xml2js');
 var Promise = require('bluebird');
+var tpl = require('./tpl');
 
 let debug = require('debug')('app:wechat:util');
 
@@ -59,3 +60,35 @@ function formatMessage(result) {
 }
 
 exports.formatMessage = formatMessage;
+
+exports.tpl = function (content, message) {
+
+    debug('content : %o', content);
+    debug('message : %o', message);
+    /**
+     * 临时对象 存储 渲染数据
+     */
+    const info = {};
+    let type = 'text';
+    /**
+     * 互换
+     */
+    let fromUserName = message.ToUserName;
+    let toUserName = message.FromUserName;
+
+    if (Array.isArray(content)) {
+        type = 'news';
+    }
+
+    type = (content && content.MsgType) || type;
+
+    info.content = content;
+    info.createTime = new Date().getTime();
+    info.msgType = type;
+    info.fromUserName = fromUserName;
+    info.toUserName = toUserName;
+
+    return tpl.compiled(info);
+
+
+};
