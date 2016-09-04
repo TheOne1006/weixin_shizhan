@@ -40,20 +40,16 @@ const tpl = heredoc(function () {
         </Music>
     <% } %>
     <% if (msgType === 'news') { %>
-        <ArticleCount>2</ArticleCount>
+        <ArticleCount><%= content.length %></ArticleCount>
         <Articles>
+            <% content.forEach(function(item) { %>
             <item>
-                <Title><![CDATA[title1]]></Title>
-                <Description><![CDATA[description1]]></Description>
-                <PicUrl><![CDATA[picurl]]></PicUrl>
-                <Url><![CDATA[url]]></Url>
+                <Title><![CDATA[<%= item.title %>]]></Title>
+                <Description><![CDATA[<%= item.description %>]]></Description>
+                <PicUrl><![CDATA[<%= item.picUrl %>]]></PicUrl>
+                <Url><![CDATA[<%= item.url %>]]></Url>
             </item>
-            <item>
-                <Title><![CDATA[title]]></Title>
-                <Description><![CDATA[description]]></Description>
-                <PicUrl><![CDATA[picurl]]></PicUrl>
-                <Url><![CDATA[url]]></Url>
-            </item>
+            <% }); %>
         </Articles>
     <% } %>
     </xml>

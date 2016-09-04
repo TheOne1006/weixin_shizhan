@@ -29,6 +29,37 @@ exports.reply = function* (next) {
         } else if (message.Event === 'LOCATION') {
             this.body = `您上报的的位置:${message.Latitude} - ${message.Longitude} - ${message.Precision}`;
         }
+    } else if (message.MsgType === 'text') {
+
+        const content = message.Content;
+        let replyContent = '';
+
+        // 回复文字
+        switch (content) {
+            case '1':
+                replyContent = '自动回复1';
+                break;
+            case '2':
+                replyContent = '自动回复2';
+                break;
+            case '3':
+                replyContent = [{
+                    title: 'title',
+                    description: 'desc',
+                    picUrl: 'https://res.cloudinary.com/theone/image/upload/v1430750829/rjpkswtvxxte4105ttrg.jpg',
+                    url: 'http://www.theone.io'
+                }, {
+                    title: 'title2',
+                    description: 'desc2',
+                    picUrl: 'https://res.cloudinary.com/theone/image/upload/v1430750900/o0ohnh0hb1t8dlc7o0ln.jpg',
+                    url: 'http://www.theone.io/cate/js/'
+                }];
+                break;
+            default:
+                replyContent = `您输入的是: ${content}`;
+        }
+
+        this.body = replyContent;
     }
 
     yield next;
